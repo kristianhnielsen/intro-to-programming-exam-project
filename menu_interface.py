@@ -1,144 +1,231 @@
-from typing import List
-from models import Region
+from typing import List, Literal
+import pandas as pd
+from models import Region, Continent
+from wikipedia import DataManager
 
 
-class MenuInterface:
-    def __init__(self) -> None:
-        self.prompt_choice = "\n\nChoose an option: \n"
-        self.functions = {
-            "display_pop": "Display the population of a region or continent.",
-            "compare_pop": "Compare the population between two regions or continents.",
-            "sort_pop": "Sort regions or continents by population size.",
-            "calc_growth": "Calculate the annual growth rate of regions or continents.",
-            "compare_growth": "Compare the growth rate between two regions or continents.",
-            "sort_growth": "Sort regions or continents by growth rate.",
-            "exit": "Exit",
-        }
-        self.regions = [
-            "Eastern Africa",
-            "Middle Africa",
-            "Northern Africa",
-            "Southern Africa",
-            "Western Africa",
-            "Caribbean",
-            "Central America",
-            "Northern America",
-            "Central Asia",
-            "Eastern Asia",
-            "South-eastern Asia",
-            "Southern Asia",
-            "Western Asia",
-            "Eastern Europe",
-            "Northern Europe",
-            "Southern Europe",
-            "Western Europe",
+class UserInterface:
+    def __init__(self):
+        self.regions: dict[str, Region] = {}
+        self.continents = {}
+        self.numbered_options = []
+
+    def load_data(self, data: pd.DataFrame):
+        for _, row in data.iterrows():
+            name = row["Name"]
+            if row.get("Type") == "Continent":
+                self.continents[name] = Continent(name, data)
+            else:
+                self.regions[name] = Region(name, data)
+
+    def display_menu(self):
+        print(
+            """\nMenu:
+    1. Display the population of a region or continent.
+    2. Compare the population between two regions or continents.
+    3. Sort regions or continents by population size.
+    4. Calculate the annual growth rate of regions or continents.
+    5. Compare the growth rate between two regions or continents.
+    6. Sort regions or continents by growth rate.
+    7. Exit
+              """
+        )
+
+    def get_year_input(self, prompt="Choose a year"):
+        years = [
+            1950,
+            1960,
+            1970,
+            1980,
+            1990,
+            2000,
+            2010,
+            2021,
         ]
-        self.continents = [
-            "Africa",
-            "North America",
-            "South America",
-            "Asia",
-            "Europe",
-            "Oceania",
-        ]
-        self.years = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2021]
+        self.display_year()
+        year_input = input(f"\n{prompt}: ")
+        if len(year_input) == 1:
+            try:
+                return years[int(year_input) - 1]
+            except IndexError:
+                print("Invalid year input")
+                exit(1)
 
-    def _generate_ordered_list_from_array(self, array: List):
-        ordered_list = [f"{index+1}\t{value}\n" for index, value in enumerate(array)]
-        stringify_ordered_list = "".join(ordered_list)
-        return stringify_ordered_list
+        elif int(year_input) in years:
+            return int(year_input)
+        else:
+            print("Invalid year input")
+            exit(1)
 
-    def _get_user_selected_function(self):
-        functions_text = f"\n{''.join([f"{index+1}\t{val}\n" for index, (key, val) in enumerate(self.functions.items())])}"
+    def display_year(self):
+        print(
+            """
+              \nYears:
+    1. 1950
+    2. 1960
+    3. 1970
+    4. 1980
+    5. 1990
+    6. 2000
+    7. 2010
+    8. 2021
+              """
+        )
 
-        selected_function = int(input("Menu:" + functions_text + self.prompt_choice))
-        if selected_function > 7 or selected_function < 0:
-            raise IndexError("Please choose a valid input")
-        elif selected_function == 7:
-            print("Bye bye")
-            exit(0)
+    def display_areas(self, area_type: str, areas: dict, display_num_starting_at=1):
+        print(f"\n{area_type.capitalize()}:")
+        for index, key in enumerate(areas.keys()):
+            print(f"{index+display_num_starting_at}. {key}")
+            self.numbered_options.append(key)
 
-        for index, (key, value) in enumerate(self.functions.items()):
-            if index + 1 == selected_function:
-                return key
-        raise IndexError("Couldn't find that function")
+    def get_area(self, name: str):
+        return self.regions.get(name) or self.continents.get(name)
 
-    def _get_user_selected_area(self) -> str:
-        # region_or_cont_text = "You want to look at:\n1 regions\n2 continents"
-        # regions_text = f"\n{self._generate_ordered_list_from_array(self.regions)}"
-        # continents_text = f"\n{self._generate_ordered_list_from_array(self.continents)}"
+    def sort_areas_by(self, statistic: Literal["Population", "Growth"]):
+        year = self.get_year_input(prompt="Choose a year to sort by")
 
-        # # Get input
-        # input_num = int(input(region_or_cont_text + self.prompt_choice))
+        # Handle no 1950 data
+        if statistic == "Growth" and year == 1950:
+            print("Growth rate data for the year 1950 not available.")
+            return
 
-        # # Get area name from input
-        # if input_num == 1:
-        #     # regions
-        #     selected_area_input = int(input(regions_text + self.prompt_choice))
-        #     selected_area_name = self.regions[selected_area_input - 1]
-        # elif input_num == 2:
-        #     # continents
-        #     selected_area_input = int(input(continents_text + self.prompt_choice))
-        #     selected_area_name = self.continents[selected_area_input - 1]
-        # else:
-        #     raise IndexError("Please choose a valid input")
+        # Need to get ANY Region
+        first_region = [region for region in self.regions.values()][0]
 
-        regions_text = f"\n{self._generate_ordered_list_from_array(self.regions)}"
+        # Get input from user if they want sorted regions or continents
+        print(
+            """\nArea types:
+    1. Continents
+    2. Regions
+              """
+        )
+        area_type_input = input("Choose an area type: ").strip().lower()
+        valid_input_continents = ["1", "continent", "continents"]
+        valid_input_regions = ["2", "region", "regions"]
 
-        # Get region name from input
-        selected_area_input = int(input(regions_text + self.prompt_choice))
-        selected_area_name = self.regions[selected_area_input - 1]
+        # Continents
+        if area_type_input in valid_input_continents and statistic == "Population":
+            sorted_data = first_region.population_sort(year=year, type="Continent")
+        elif area_type_input in valid_input_continents and statistic == "Growth":
+            sorted_data = first_region.growth_sort(year=year, type="Continent")
+        # Regions
+        elif area_type_input in valid_input_regions and statistic == "Population":
+            sorted_data = first_region.population_sort(year=year, type="Region")
+        elif area_type_input in valid_input_regions and statistic == "Growth":
+            sorted_data = first_region.growth_sort(year=year, type="Region")
+        else:
+            print("Invalid input")
+            return
 
-        return selected_area_name
+        print(f"\nAreas sorted by {statistic.lower()} in {year}:")
+        print(sorted_data, "\n")
 
-    def get_input(self):
-        selected_function_name = self._get_user_selected_function()
-        selected_area_name = self._get_user_selected_area()
+    def compare_statistic(self, statistic: Literal["Population", "Growth"]):
+        self.display_areas(area_type="continents", areas=self.continents)
+        self.display_areas(
+            area_type="regions",
+            areas=self.regions,
+            display_num_starting_at=len(self.continents) + 1,
+        )
+        try:
+            area_input_1 = int(input("\nEnter the first region/continent number: "))
+            area_input_2 = int(input("\nEnter the second region/continent number: "))
+            area_name_1 = self.numbered_options[area_input_1 - 1]
+            area_name_2 = self.numbered_options[area_input_2 - 1]
+        except IndexError:
+            print("Invalid input")
+            return
+        area_object_1 = self.get_area(area_name_1)
+        area_object_2 = self.get_area(area_name_2)
 
-        return selected_function_name, selected_area_name
+        year = self.get_year_input()
 
-    def _get_user_selected_year(self):
-        # Generate prompt and prompt for year
-        ordered_years = self._generate_ordered_list_from_array(self.years)
-        prompt = f"\n{ordered_years}{self.prompt_choice}"
-        user_input_year = int(input(prompt))
-        return self.years[user_input_year - 1]
+        # Handle no 1950 data
+        if statistic == "Growth" and year == 1950:
+            print("Growth rate data for the year 1950 not available.")
+            return
 
-    def run_statistic(self, function_name: str, selected_region: Region):
-        for index, func in enumerate(self.functions.keys()):
-            if func == function_name:
+        if area_object_1 and area_object_2 and statistic == "Population":
+            area_object_1.population_comparison(area_object_2, year)
+        elif area_object_1 and area_object_2 and statistic == "Growth":
+            area_object_1.growth_comparison(area_object_2, year)
+        else:
+            print("No data found for one or both regions/continents.")
 
-                # check what key the function_name is, and execute the chosen function on the Region class
-                match index:
-                    case 0:
-                        # func == display_pop
-                        user_selected_year: int = self._get_user_selected_year()
-                        selected_region._display_population(year=user_selected_year)
-                    case 1:
-                        # func == compare_pop
-                        region_to_compare = self._get_user_selected_area()
-                        user_selected_year: int = self._get_user_selected_year()
-                        selected_region._population_comparison(
-                            compare_region=region_to_compare, year=user_selected_year
-                        )
-                    case 2:
-                        # func == sort_pop
-                        user_selected_year: int = self._get_user_selected_year()
-                        selected_region._population_sort(year=user_selected_year)
-                    case 3:
-                        # func == calc_growth
-                        user_selected_year: int = self._get_user_selected_year()
-                        selected_region._growth_calculator(year=user_selected_year)
-                    case 4:
-                        # func == compare_growth
-                        region_to_compare = self._get_user_selected_area()
-                        user_selected_year: int = self._get_user_selected_year()
-                        selected_region._growth_comparison(
-                            compare_region=region_to_compare, year=user_selected_year
-                        )
-                    case 5:
-                        # func == sort_growth
-                        user_selected_year: int = self._get_user_selected_year()
-                        selected_region._growth_sort(year=user_selected_year)
-                    case _:
-                        exit(1)
+    def display_population(self):
+        """Displays the population of a region in a specific year."""
+        self.display_areas(area_type="continents", areas=self.continents)
+        self.display_areas(
+            area_type="regions",
+            areas=self.regions,
+            display_num_starting_at=len(self.continents) + 1,
+        )
+        try:
+            area_input = int(input("\nEnter region/continent number: "))
+            area_name = self.numbered_options[area_input - 1]
+        except IndexError:
+            print("Invalid input")
+            return
+        area_object = self.get_area(area_name)
+
+        year = self.get_year_input()
+
+        if area_object:
+            area_object.display_population(year)
+        else:
+            print(f"No data for {area_name}.")
+
+    def calculate_growth_rate(self):
+        """Calculates the annual growth rate of a region in a specific year."""
+        self.display_areas(area_type="continents", areas=self.continents)
+        self.display_areas(
+            area_type="regions",
+            areas=self.regions,
+            display_num_starting_at=len(self.continents) + 1,
+        )
+        try:
+            area_input = int(input("\nEnter region/continent number: "))
+            area_name = self.numbered_options[area_input - 1]
+        except IndexError:
+            print("Invalid input")
+            return
+
+        area_object = self.get_area(area_name)
+
+        year = self.get_year_input()
+
+        if area_object and year == 1950:
+            print("Growth rate data for the year 1950 not available.")
+        elif area_object:
+            area_object.growth_calculator(year)
+        else:
+            print(f"No data for {area_name}.")
+
+    def run(self):
+        while True:
+            self.numbered_options.clear()
+            self.display_menu()
+            choice = input("Choose an option: ").strip()
+            print("\n")
+            if choice == "1":
+                self.display_population()
+            elif choice == "2":
+                self.compare_statistic("Population")
+            elif choice == "3":
+                self.sort_areas_by(statistic="Population")
+            elif choice == "4":
+                self.calculate_growth_rate()
+            elif choice == "5":
+                self.compare_statistic("Growth")
+            elif choice == "6":
+                self.sort_areas_by(statistic="Growth")
+            elif choice == "7":
+                print("Exiting program.")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+                continue
+
+            continue_input = input("Continue? (y/n) ")
+            if continue_input.lower() == "n":
+                break

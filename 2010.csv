@@ -1,26 +1,26 @@
-Year,Pop.,Growth,Region
-2010,342743000,+2.83%,Eastern Africa
-2010,130598000,+3.11%,Middle Africa
-2010,203717000,+1.71%,Northern Africa
-2010,59067000,+1.39%,Southern Africa
-2010,307982000,+2.73%,Western Africa
-2010,1044107000,+2.52%,Total Africa
-2010,943952000,+1.17%,Total Americas
-2010,41621000,+0.83%,Caribbean
-2010,161117000,+1.50%,Central America
-2010,344129000,+0.93%,Northern America
-2010,546867000,+1.09%,Total North America
-2010,397085000,+1.28%,Total South America
-2010,62139000,+1.21%,Central Asia
-2010,1575320000,+0.52%,Eastern Asia
-2010,596708000,+1.27%,South-eastern Asia
-2010,1702969000,+1.61%,Southern Asia
-2010,232703000,+2.32%,Western Asia
-2010,4169850000,+1.16%,Total Asia
-2010,294591000,−0.31%,Eastern Europe
-2010,99682000,+0.55%,Northern Europe
-2010,153360000,+0.56%,Southern Europe
-2010,187762000,+0.25%,Western Europe
-2010,735395000,+0.12%,Total Europe
-2010,36411000,+1.60%,Total Oceania
-2010,6929725000,+1.24%,Total World
+Year,Pop,Growth,Type,Name
+2010,342743000,2.83,Region,Eastern Africa
+2010,130598000,3.11,Region,Middle Africa
+2010,203717000,1.71,Region,Northern Africa
+2010,59067000,1.39,Region,Southern Africa
+2010,307982000,2.73,Region,Western Africa
+2010,1044107000,2.52,Continent,Africa
+2010,943952000,1.17,Continent,Americas
+2010,41621000,0.83,Region,Caribbean
+2010,161117000,1.5,Region,Central America
+2010,344129000,0.93,Region,Northern America
+2010,546867000,1.09,Continent,North America
+2010,397085000,1.28,Continent,South America
+2010,62139000,1.21,Region,Central Asia
+2010,1575320000,0.52,Region,Eastern Asia
+2010,596708000,1.27,Region,South-eastern Asia
+2010,1702969000,1.61,Region,Southern Asia
+2010,232703000,2.32,Region,Western Asia
+2010,4169850000,1.16,Continent,Asia
+2010,294591000,,Region,Eastern Europe
+2010,99682000,0.55,Region,Northern Europe
+2010,153360000,0.56,Region,Southern Europe
+2010,187762000,0.25,Region,Western Europe
+2010,735395000,0.12,Continent,Europe
+2010,36411000,1.6,Continent,Oceania
+2010,6929725000,1.24,Continent,World

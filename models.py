@@ -3,62 +3,100 @@ import pandas as pd
 
 
 class Region:
-    def __init__(self, name: str, data: pd.DataFrame) -> None:
-        self.name: str = name
-        self.data = data.set_index("Region")
+    def __init__(self, name: str, population_data: pd.DataFrame):
+        self.name = name
+        self.population_data = population_data
 
-    def _display_population(self, year: int):
-        try:
-            region_data = self.data.query(f"Year == {year} and Region == '{self.name}'")
-            if not region_data.empty:
-                pop = region_data["Pop"].iloc[0]
-                print(f"{self.name} population in {year}: {pop}")
-            else:
-                print(f"No data found for {self.name} in {year}.")
-        except Exception as e:
-            raise Exception("Error displaying population: {e}")
+    def _get_population_on_year(self, year: int):
+        """Gets the data for population on a specific year"""
+        return self.population_data.query(
+            f"Year == {year} and Name == '{self.name}'"
+        ).iloc[0]["Pop"]
 
-    def _population_comparison(self, compare_region: str, year: int):
-        region_data = self.data.query(
-            f"Year == {year} and (Region == '{self.name}' or Region == '{compare_region}')"
+    def _get_growth_on_year(self, year: int):
+        """Gets the data for growth on a specific year"""
+        return self.population_data.query(
+            f"Year == {year} and Name == '{self.name}'"
+        ).iloc[0]["Growth"]
+
+    def display_population(self, year: int):
+        """Displays the population of a region in a specific year."""
+        print(
+            f"\n[Region] {self.name} - Population in {year}: {self._get_population_on_year(year)}"
         )
-        if region_data.empty:
-            print(f"No data found for {self.name} or {compare_region} in year {year}.")
+
+    def population_comparison(self, other_area, year: int):
+        """Compare the population with another region for a specific year."""
+        pop1 = self._get_population_on_year(year)
+        pop2 = other_area._get_population_on_year(year)
+        if pop1 and pop2:
+            larger = self if pop1 > pop2 else other_area
+            smaller = self if pop1 < pop2 else other_area
+            print(
+                f"In {year}, {larger.name} has a larger population than {smaller.name}."
+            )
+            print(f"{larger.name}: {larger._get_population_on_year(year)}")
+            print(f"{smaller.name}: {smaller._get_population_on_year(year)}")
         else:
-            for region in [self.name, compare_region]:
-                region_pop = region_data[region_data["Region"] == region]["Pop"].iloc[0]
-                print(f"Population of {region} in {year}: {region_pop}")
-        print(region_data)
+            print(f"Missing population data for comparison in {year}.")
 
-    def _population_sort(self, year: int, ascending=True):
-        # Sorts regions by population size in a specific year.
-        sorted_pop = self.data.query(f"Year == {year}").sort_values(
-            "Pop", ascending=ascending
+    def population_sort(self, year: int, type="Region"):
+        """
+        Sorts regions by population size in a specific year.
+        NOTE: this method only queries the full dataset, so it is irrelevant which instance calls this method
+        """
+        return (
+            self.population_data.query(f"Year == {year} and Type == '{type}'")
+            .sort_values("Pop", ascending=False)
+            .set_index("Name")[["Pop"]]
         )
-        print(sorted_pop)
 
-    def _growth_calculator(self, year: int):
-        # Calculates the annual growth rate of a region in a specific year.
-        growth = self.data.query(f"Year=={year}")["Growth"]
-        print(f"Growth rate: {growth}%")
+    def growth_calculator(self, year: int):
+        """Calculate annual growth rate for a year."""
 
-    def _growth_comparison(self, compare_region: str, year: int):
-        # Compares the growth rate between two regions in a specific year.
-        data_sorted_by_year = self.data.query(f"Year == {year}")
-        data_sorted_by_year_and_regions = data_sorted_by_year.query(
-            f"Region == '{self.name}' or Region == '{compare_region}'"
+        growth_rate = self._get_growth_on_year(year)
+        print(f"The growth rate for {self.name}: {growth_rate}%")
+
+    def growth_comparison(self, other_area, year: int):
+        """Compares the growth rate between two regions in a specific year."""
+
+        pop1 = self._get_growth_on_year(year)
+        pop2 = other_area._get_growth_on_year(year)
+        if pop1 and pop2:
+            larger = self if pop1 > pop2 else other_area
+            smaller = self if pop1 < pop2 else other_area
+            print(
+                f"In {year}, {larger.name} has a larger growth rate than {smaller.name}."
+            )
+            print(f"{larger.name}: {larger._get_growth_on_year(year)}%")
+            print(f"{smaller.name}: {smaller._get_growth_on_year(year)}%")
+        else:
+            print(f"Missing growth rate data for comparison in {year}.")
+
+    def growth_sort(self, year: int, type="Region"):
+        """
+        Sorts regions by growth rate in a specific year.
+        NOTE: this method only queries the full dataset, so it is irrelevant which instance calls this method
+        """
+
+        return (
+            self.population_data.query(f"Year == {year} and Type == '{type}'")
+            .sort_values("Growth", ascending=False)
+            .set_index("Name")[["Growth"]]
         )
-        data_sorted_by_year_and_regions.set_index("Region")
-        print(data_sorted_by_year_and_regions)
 
-    def _growth_sort(self, year: int, ascending=True):
-        # Sorts regions by growth rate in a specific year.
-        growth_by_year = self.data.query("Year=={year}").sort_values(
-            "Growth", ascending=ascending
-        )
-        print(growth_by_year)
+    def __repr__(self):
+        return f"Region({self.name})"
 
 
 class Continent(Region):
-    def __init__(self, name: str, data: pd.DataFrame) -> None:
-        super().__init__(name, data)
+    def __init__(self, name: str, population_data: pd.DataFrame):
+        super().__init__(name, population_data)
+
+    def display_population(self, year: int):
+        print(
+            f"[Continent] {self.name} - Population in {year}: {self._get_population_on_year(year)}"
+        )
+
+    def __repr__(self):
+        return f"Continent({self.name})"

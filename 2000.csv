@@ -1,26 +1,26 @@
-Year,Pop.,Growth,Region
-2000,259373000,+2.72%,Eastern Africa
-2000,96113000,+3.09%,Middle Africa
-2000,171891000,+2.06%,Northern Africa
-2000,51451000,+2.04%,Southern Africa
-2000,235235000,+2.69%,Western Africa
-2000,814063000,+2.57%,Total Africa
-2000,840614000,+1.46%,Total Americas
-2000,38314000,+1.14%,Caribbean
-2000,138780000,+1.91%,Central America
-2000,313724000,+1.12%,Northern America
-2000,490818000,+1.34%,Total North America
-2000,349796000,+1.62%,Total South America
-2000,55117000,+0.90%,Central Asia
-2000,1496284000,+0.90%,Eastern Asia
-2000,526179000,+1.67%,South-eastern Asia
-2000,1451933000,+2.02%,Southern Asia
-2000,184957000,+2.22%,Western Asia
-2000,3714470000,+1.49%,Total Asia
-2000,303789000,−0.20%,Eastern Europe
-2000,94397000,+0.25%,Northern Europe
-2000,145058000,+0.11%,Southern Europe
-2000,183163000,+0.42%,Western Europe
-2000,726407000,+0.07%,Total Europe
-2000,31068000,+1.42%,Total Oceania
-2000,6126622000,+1.44%,Total World
+Year,Pop,Growth,Type,Name
+2000,259373000,2.72,Region,Eastern Africa
+2000,96113000,3.09,Region,Middle Africa
+2000,171891000,2.06,Region,Northern Africa
+2000,51451000,2.04,Region,Southern Africa
+2000,235235000,2.69,Region,Western Africa
+2000,814063000,2.57,Continent,Africa
+2000,840614000,1.46,Continent,Americas
+2000,38314000,1.14,Region,Caribbean
+2000,138780000,1.91,Region,Central America
+2000,313724000,1.12,Region,Northern America
+2000,490818000,1.34,Continent,North America
+2000,349796000,1.62,Continent,South America
+2000,55117000,0.9,Region,Central Asia
+2000,1496284000,0.9,Region,Eastern Asia
+2000,526179000,1.67,Region,South-eastern Asia
+2000,1451933000,2.02,Region,Southern Asia
+2000,184957000,2.22,Region,Western Asia
+2000,3714470000,1.49,Continent,Asia
+2000,303789000,,Region,Eastern Europe
+2000,94397000,0.25,Region,Northern Europe
+2000,145058000,0.11,Region,Southern Europe
+2000,183163000,0.42,Region,Western Europe
+2000,726407000,0.07,Continent,Europe
+2000,31068000,1.42,Continent,Oceania
+2000,6126622000,1.44,Continent,World

@@ -1,26 +1,26 @@
-Year,Pop.,Growth,Region
-1970,110428000,+2.74%,Eastern Africa
-1970,40846000,+2.40%,Middle Africa
-1970,82883000,+2.67%,Northern Africa
-1970,25454000,+2.58%,Southern Africa
-1970,106015000,+2.24%,Western Africa
-1970,365626000,+2.53%,Total Africa
-1970,519522000,+2.02%,Total Americas
-1970,25306000,+2.02%,Caribbean
-1970,69702000,+3.09%,Central America
-1970,231029000,+1.24%,Northern America
-1970,326036000,+1.67%,Total North America
-1970,193486000,+2.64%,Total South America
-1970,33156000,+3.02%,Central Asia
-1970,978113000,+2.18%,Eastern Asia
-1970,281521000,+2.79%,South-eastern Asia
-1970,741603000,+2.25%,Southern Asia
-1970,86037000,+2.66%,Western Asia
-1970,2120430000,+2.31%,Total Asia
-1970,276396000,+0.86%,Eastern Europe
-1970,87305000,+0.65%,Northern Europe
-1970,127617000,+0.80%,Southern Europe
-1970,165903000,+0.86%,Western Europe
-1970,657221000,+0.82%,Total Europe
-1970,19688000,+2.23%,Total Oceania
-1970,3682488000,+2.01%,Total World
+Year,Pop,Growth,Type,Name
+1970,110428000,2.74,Region,Eastern Africa
+1970,40846000,2.4,Region,Middle Africa
+1970,82883000,2.67,Region,Northern Africa
+1970,25454000,2.58,Region,Southern Africa
+1970,106015000,2.24,Region,Western Africa
+1970,365626000,2.53,Continent,Africa
+1970,519522000,2.02,Continent,Americas
+1970,25306000,2.02,Region,Caribbean
+1970,69702000,3.09,Region,Central America
+1970,231029000,1.24,Region,Northern America
+1970,326036000,1.67,Continent,North America
+1970,193486000,2.64,Continent,South America
+1970,33156000,3.02,Region,Central Asia
+1970,978113000,2.18,Region,Eastern Asia
+1970,281521000,2.79,Region,South-eastern Asia
+1970,741603000,2.25,Region,Southern Asia
+1970,86037000,2.66,Region,Western Asia
+1970,2120430000,2.31,Continent,Asia
+1970,276396000,0.86,Region,Eastern Europe
+1970,87305000,0.65,Region,Northern Europe
+1970,127617000,0.8,Region,Southern Europe
+1970,165903000,0.86,Region,Western Europe
+1970,657221000,0.82,Continent,Europe
+1970,19688000,2.23,Continent,Oceania
+1970,3682488000,2.01,Continent,World
