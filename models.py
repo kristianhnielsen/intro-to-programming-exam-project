@@ -87,6 +87,9 @@ class Region:
     def __repr__(self):
         return f"Region({self.name})"
 
+    def __str__(self):
+        return f"Region({self.name})"
+
 
 class Continent(Region):
     def __init__(self, name: str, population_data: pd.DataFrame):
@@ -98,4 +101,7 @@ class Continent(Region):
         )
 
     def __repr__(self):
+        return f"Continent({self.name})"
+
+    def __str__(self):
         return f"Continent({self.name})"
